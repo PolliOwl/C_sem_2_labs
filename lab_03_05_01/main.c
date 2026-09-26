@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include "matrix.h"
+
+int main(void)
+{
+    int matrix[MAX_ROWS][MAX_COLS];
+    int arr[MAX_ROWS * MAX_COLS];
+    size_t rows, cols;
+    int tmp_rows, tmp_cols;
+    size_t valid_count;
+    
+    printf("Введите количество строк: ");
+    if (scanf("%d", &tmp_rows) != 1)
+    {
+        printf("Ошибка: некорректный ввод количества строк\n");
+        return ERROR_INPUT_ROWS;
+    }
+    
+    if (tmp_rows <= 0)
+    {
+        printf("Ошибка: количество строк должно быть положительным\n");
+        return ERROR_INPUT_ROWS;
+    }
+    
+    if (tmp_rows > MAX_ROWS)
+    {
+        printf("Ошибка: превышен максимальный размер строк\n");
+        return ERROR_INPUT_ROWS;
+    }
+    
+    printf("Введите количество столбцов: ");
+    if (scanf("%d", &tmp_cols) != 1)
+    {
+        printf("Ошибка: некорректный ввод количества столбцов\n");
+        return ERROR_INPUT_COLS;
+    }
+    
+    if (tmp_cols <= 0)
+    {
+        printf("Ошибка: количество столбцов должно быть положительным\n");
+        return ERROR_INPUT_COLS;
+    }
+    
+    if (tmp_cols > MAX_COLS)
+    {
+        printf("Ошибка: превышен максимальный размер столбцов\n");
+        return ERROR_INPUT_COLS;
+    }
+    
+    rows = (size_t)tmp_rows;
+    cols = (size_t)tmp_cols;
+    
+    printf("Введите элементы матрицы:\n");
+    if (input_matrix(matrix, rows, cols) != 0)
+    {
+        printf("Ошибка: некорректный ввод элемента матрицы\n");
+        return ERROR_INPUT_ELEM;
+    }
+    
+    valid_count = collect_valid_numbers(arr, matrix, rows, cols);
+    
+    if (valid_count == 0)
+    {
+        printf("Ошибка: нет чисел с суммой цифр больше десяти\n");
+        return ERROR_NO_VALID_NUMBERS;
+    }
+    
+    shift_left_3(arr, valid_count);
+    
+    put_back_to_matrix(matrix, arr, valid_count, rows, cols);
+    
+    printf("Результат:\n");
+    output_matrix(matrix, rows, cols);
+    
+    return 0;
+}

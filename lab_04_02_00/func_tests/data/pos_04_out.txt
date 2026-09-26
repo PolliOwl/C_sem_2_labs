@@ -1,0 +1,2 @@
+Result:
+word 1
